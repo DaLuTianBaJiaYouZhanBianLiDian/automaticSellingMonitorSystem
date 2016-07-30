@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+    <id>package</id>
+    <formats>
+        <format>war</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/webapp</directory>
+            <includes>  
+                <include>lib/**</include>  
+                <include>WEB-INF/**</include>  
+                <include>automaticSellingMonitorSystem/*/common/**</include>  
+                <include>automaticSellingMonitorSystem/*/system/**</include>  
+                <include>automaticSellingMonitorSystem/*/ndas/**</include>  
+                <include>automaticSellingMonitorSystem/*/naas/**</include>  
+                <include>automaticSellingMonitorSystem/*/nats/**</include>  
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>WEB-INF/classes</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/classes</directory>
+            <includes>  
+                <include>com/zyuc/common/**</include>  
+                <include>com/zyuc/system/**</include>  
+                <include>com/zyuc/ndas/**</include>  
+                <include>com/zyuc/naas/**</include>  
+                <include>com/zyuc/nats/**</include>  
+            </includes> 
+            <outputDirectory>WEB-INF/classes</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>WEB-INF/lib</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>

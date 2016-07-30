@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyuc.system.dao.IIndexMapper">
+	<resultMap type="java.util.HashMap" id="fpsMapList">
+		<result column="datatime" property="datatime" />
+		<result column="fps" property="fps" />
+	</resultMap>
+
+	<resultMap type="java.util.HashMap" id="bpsMapList">
+		<result column="datatime" property="datatime" />
+		<result column="GBps" property="GBps" />
+		<result column="Mpps" property="Mpps" />
+	</resultMap>
+
+	<resultMap type="java.util.HashMap" id="routebpsMapList">
+		<result column="datatime" property="datatime" />
+		<result column="bps" property="bps" />
+		<result column="pps" property="pps" />
+		<result column="fps" property="fps" />
+	</resultMap>
+	
+	<resultMap type="java.util.HashMap" id="routeInterList">
+		<result column="index" property="index" />
+		<result column="speed" property="speed" />
+		<result column="description" property="description" />
+	</resultMap>
+
+	<select id="getMaxdatatime" parameterType="map" resultType="Object">
+		select max(datatime)
+		from ${dbname}.system_count
+		where isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+
+	<select id="getRoutenum" parameterType="map" resultType="Object">
+		select
+		count(1) as routenum
+		from (select distinct(routeip) from
+		${dbsystemname}.routecollector)a
+	</select>
+
+	<select id="getCustnum" parameterType="map" resultType="Object">
+		select
+		count(*) as cusnum
+		from ${dbsystemname}.base_customer
+	</select>
+
+	<select id="getRunningday" parameterType="map" resultType="Object">
+		select ROUND ((max(linuxtime)-min(linuxtime))/3600 /24,2) as days
+		from
+		${dbname}.system_count
+		where isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+
+	<select id="getFlowcount" parameterType="map" resultType="Object">
+		select
+		ROUND ((sum(fps)*60)/10000,2) as sumflow
+		from
+		${dbname}.system_count
+		where isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+
+	<select id="getRunningFps" parameterType="map" resultType="Object">
+		select ROUND(sum(fps),1)
+		from ${dbname}.system_count
+		where linuxtime =(
+		select max(linuxtime)
+		from ${dbname}.system_count
+		where isp_code=#{isp_code}
+		and work_id=#{work_id}
+		)
+	</select>
+
+	<select id="getRunningGBps" parameterType="map" resultType="Object">
+		select sum(bps) as GBps
+		from ${dbname}.system_count
+		where linuxtime =(
+		select max(linuxtime)
+		from ${dbname}.system_count
+		where isp_code=#{isp_code}
+		and
+		work_id=#{work_id}
+		)
+	</select>
+
+	<select id="getFlowFps" parameterType="map" resultMap="fpsMapList">
+		select
+		sum(fps) as fps,datatime
+		from ${dbname}.system_count
+		where
+		datatime &gt;=#{datetime}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		GROUP BY datatime
+	</select>
+
+	<select id="getFlowBps" parameterType="map" resultMap="bpsMapList">
+		select
+		datatime, sum(bps) as GBps,sum(pps) as Mpps
+		from ${dbname}.system_count
+		where 
+		datatime &gt;=#{datetime}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		GROUP by datatime
+		ORDER BY datatime
+	</select>
+
+	<select id="getRoutes" parameterType="map" resultType="com.zyuc.system.model.Route">
+		select *
+		from
+		${dbsystemname}.routecollector
+	</select>
+
+	<select id="getRouteMaxDatetime" parameterType="map" resultType="Object">
+		select max(datatime)
+		from ${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		
+	</select>
+	<select id="getRouteRunningDay" parameterType="map" resultType="Object">
+		select ROUND ((max(linuxtime)-min(linuxtime))/3600 /24,2)
+		as days
+		from
+		${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+	<select id="getRouteFlowCount" parameterType="map" resultType="Object">
+		select ROUND ((sum(fps)*60)/10000,2) as sumflow
+		from
+		${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+	<select id="getRouteFps" parameterType="map" resultType="Object">
+		select
+		ROUND(sum(fps),1)
+		from ${dbname}.system_count
+		where linuxtime =(
+		select
+		max(linuxtime)
+		from ${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		)
+		and route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+	<select id="getRouteBps" parameterType="map" resultType="Object">
+		select
+		sum(bps) as GBps
+		from ${dbname}.system_count
+		where linuxtime =(
+		select
+		max(linuxtime)
+		from ${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		)
+		and route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+	</select>
+	<select id="getRouteCharts" parameterType="map" resultMap="routebpsMapList">
+		select sum(fps) as fps,sum(bps) as bps ,sum(pps) as pps ,datatime
+		from
+		${dbname}.system_count
+		where
+		route=#{route}
+		and isp_code=#{isp_code}
+		and work_id=#{work_id}
+		and datatime &gt;=#{starttime}
+		and datatime &lt;=#{endtime}
+		GROUP BY datatime
+	</select>
+	
+	<select id="getRouterIfs" parameterType="map" resultMap="routeInterList">
+		SELECT `index`,description,speed 
+		FROM ${dbsystemname}.routeinterface 
+		WHERE routeip=#{ip} 
+		ORDER BY `index`
+	</select>
+	<select id="clearRouterIfs" parameterType="map">
+		DELETE  FROM  ${dbsystemname}.routeinterface WHERE routeip = #{ip} 
+	</select>
+	
+	<insert id="insertRouterIfs" parameterType="com.zyuc.system.model.RouteInterface" >
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+			SELECT @@IDENTITY
+		</selectKey>
+		INSERT INTO ${dbsystemname}.routeinterface (`index`,description,speed,routeip) 
+		VALUES
+		(#{index},#{description},#{speed},#{routeip})
+		
+	</insert>
+	
+
+</mapper>

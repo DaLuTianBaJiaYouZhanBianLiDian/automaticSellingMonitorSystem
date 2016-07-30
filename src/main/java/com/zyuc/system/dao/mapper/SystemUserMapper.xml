@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyuc.system.dao.ISystemUserMapper">
+
+	<select id="getUsersByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition" resultType="com.zyuc.system.model.SystemUser">
+		select user_id as userId, user_name as userName,password as password,phone_number as phone, mobile_phone as mobile, 
+		user_type as userType, status ,email, qq,weixin,create_time as dateTime, update_time as updateTime
+		FROM
+		${dbsystemname}.system_user
+		WHERE 1 =1
+		<if test="userName != null and userName !=''">
+			and user_name LIKE CONCAT('%',#{userName},'%')
+		</if>
+		<if test="userType != null and userType !=''">
+			<if test="userType != '-1' ">
+				and user_type=#{userType}
+			</if>
+		</if>
+		<if test="status !=null and status !=''">
+			<if test="status != '-1' ">
+				and status=#{status}
+			</if>
+		</if>
+		and isdelete = 1
+		<if test="sortKeyType != null and sortDirectType !=null">
+		ORDER BY ${sortKeyType} ${sortDirectType}
+		</if>
+		<if test="pagingCondition != null and pagingCondition.startIndex != null and pagingCondition.count !=null">
+			limit #{pagingCondition.startIndex},#{pagingCondition.count}
+		</if>
+
+	</select>
+
+	<select id="getUsersSizeByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition"
+		resultType="int">
+		SELECT count(*)
+		FROM ${dbsystemname}.system_user
+		WHERE 1 =1
+		<if test="userName != null and userName !=''">
+			and user_name LIKE CONCAT('%',#{userName},'%')
+		</if>
+		<if test="userType != null and userType !=''">
+			<if test="userType != '-1' ">
+				and user_type=#{userType}
+			</if>
+		</if>
+		<if test="status !=null and status !=''">
+			<if test="status != '-1' ">
+				and status=#{status}
+			</if>
+		</if>
+		and isdelete = 1
+
+	</select>
+
+	<insert id="saveSystemUser" parameterType="com.zyuc.system.model.SystemUser" >
+		<selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+			SELECT @@IDENTITY
+		</selectKey>
+		INSERT INTO
+		${dbsystemname}.`system_user`
+		(`user_id`, `user_name`,
+		`password`, `phone_number`, `mobile_phone`, `user_type`,
+		`email`,
+		`status`, `qq`, `weixin`, `create_time`, `update_time`) VALUES
+		(null,#{userName},#{password},#{phone},#{mobile},#{userType},#{email},#{status},#{qq},#{weixin},#{dateTime},#{updateTime})
+	</insert>
+
+	<select id="getUserById" parameterType="map" resultType="com.zyuc.system.model.SystemUser">
+		select user_id as userId, user_name as userName,password as password,phone_number as phone, mobile_phone as mobile, 
+		user_type as userType, status ,email, qq,weixin,create_time as dateTime, update_time as updateTime
+		FROM
+		${dbsystemname}.system_user
+		where user_id=#{userId}
+		and isdelete =1
+	</select>
+
+	<update id="updateSystemUser" parameterType="com.zyuc.system.model.SystemUser">
+		update ${dbsystemname}.system_user
+		<set>
+			<if test="userName != null and userName != '' ">
+				user_name=#{userName},
+			</if>
+			<if test="phone != null and phone != '' ">
+				phone_number=#{phone},
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				mobile_phone=#{mobile},
+			</if>
+			<if test="userType != null and userType != '' ">
+				user_type=#{userType},
+			</if>
+			<if test="email != null and email != '' ">
+				email=#{email},
+			</if>
+			<if test="status != null and status != '' ">
+				status=#{status},
+			</if>
+			<if test="qq != null and qq != '' ">
+				qq=#{qq},
+			</if>
+			<if test="weixin != null and weixin != '' ">
+				weixin=#{weixin},
+			</if>
+			<if test="isDelete != null and isDelete != '' ">
+				isdelete=#{isDelete},
+			</if>
+			<if test="dateTime != null ">
+				create_time=#{dateTime},
+			</if>
+			<if test="updateTime != null ">
+				update_time=#{updateTime},
+			</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+
+	<select id="getRolesByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition" resultType="com.zyuc.system.model.SystemRole">
+		select id, role_name as roleName, role_type as roleType, role_desc as roleDesc, 
+		create_user as createUser , create_time as createTime, update_user as updateUser, update_time as updateTime
+		FROM
+		${dbsystemname}.system_roleen
+		WHERE 1 =1
+		<if test="roleName != null and roleName !=''">
+			and role_name LIKE CONCAT('%',#{roleName},'%')
+		</if>
+		<if test="roleType != null ">
+			and role_type LIKE CONCAT('%',#{roleType},'%')
+		</if>
+		and isdelete = 1
+		<if test="sortKeyType != null and sortDirectType !=null">
+		ORDER BY ${sortKeyType} ${sortDirectType}
+		</if>
+		<if test="pagingCondition != null and pagingCondition.startIndex != null and pagingCondition.count !=null">
+			limit #{pagingCondition.startIndex},#{pagingCondition.count}
+		</if>
+	</select>
+	
+	<select id="getRolesSizeByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition" resultType="int">
+		SELECT count(*)
+		FROM ${dbsystemname}.system_roleen
+		WHERE 1 =1
+		<if test="roleName != null and roleName !=''">
+			and role_name LIKE CONCAT('%',#{roleName},'%')
+		</if>
+		<if test="roleType != null ">
+			and role_type LIKE CONCAT('%',#{roleType},'%')
+		</if>
+		and isdelete = 1
+	</select>
+	
+	<insert id="saveRole" parameterType="com.zyuc.system.model.SystemRole" >
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+			SELECT @@IDENTITY
+		</selectKey>
+		INSERT INTO ${dbsystemname}.system_roleen
+		(`id`, `role_name`,`role_type`, `role_desc`, 
+		`create_time`, `create_user`,`update_user`,`update_time`,`isdelete`) VALUES
+		(null,#{roleName},#{roleType},#{roleDesc},#{createTime},#{createUser},#{updateUser},#{updateTime},1)
+	</insert>
+	
+	<select id="getRoleById" parameterType="map" resultType="com.zyuc.system.model.SystemRole">
+		select id, role_name as roleName, role_type as roleType, role_desc as roleDesc, 
+		create_user as createUser , create_time as createTime, update_user as updateUser, update_time as updateTime
+		FROM
+		${dbsystemname}.system_roleen
+		where id=#{roleId}
+		and isdelete =1
+	</select>
+	
+	<update id="updateRole" parameterType="com.zyuc.system.model.SystemRole">
+		update ${dbsystemname}.system_roleen
+		<set>
+			<if test="roleName != null and roleName != '' ">
+				role_name=#{roleName},
+			</if>
+			<if test="roleType != null and roleType != '' ">
+				role_type=#{roleType},
+			</if>
+			<if test="roleDesc != null and roleDesc != '' ">
+				role_desc=#{roleDesc},
+			</if>
+			<if test="createUser != null and createUser != '' ">
+				create_user=#{createUser},
+			</if>
+			<if test="updateUser != null and updateUser != '' ">
+				update_user=#{updateUser},
+			</if>
+			<if test="createTime != null ">
+				create_time=#{createTime},
+			</if>
+			<if test="updateTime != null ">
+				update_time=#{updateTime},
+			</if>
+			<if test="isDelete != null and isDelete != '' ">
+				isdelete=#{isDelete},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="getFunctionsByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition" resultType="com.zyuc.common.model.SystemFunction">
+		select id, super_id , function_name , function_url, function_icon , function_type , 
+		function_icon , function_desc  ,showorder,
+		create_user , create_time , update_user , update_time 
+		FROM
+		${dbsystemname}.system_functionen
+		WHERE 1 =1
+		<if test="function_name != null and function_name !=''">
+			and function_name LIKE CONCAT('%',#{function_name},'%')
+		</if>
+		and isdelete = 1
+		<if test="sortKeyType != null and sortDirectType !=null">
+		ORDER BY ${sortKeyType} ${sortDirectType}
+		</if>
+		<if test="pagingCondition != null and pagingCondition.startIndex != null and pagingCondition.count !=null">
+			limit #{pagingCondition.startIndex},#{pagingCondition.count}
+		</if>
+	</select>
+	
+	<select id="getFunctionsSizeByCondition" parameterType="com.zyuc.system.model.condition.UserTableCondition" resultType="int">
+		SELECT count(*)
+		FROM ${dbsystemname}.system_functionen
+		WHERE 1 =1
+		<if test="function_name != null and function_name !=''">
+			and function_name LIKE CONCAT('%',#{function_name},'%')
+		</if>
+		and isdelete = 1
+	</select>
+	
+	<insert id="saveFunction" parameterType="com.zyuc.common.model.SystemFunction"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ${dbsystemname}.system_functionen
+		(`id`, `super_id`,`function_name`, `function_url`, `function_icon`,`function_type`,
+		 `function_desc`, `create_time`, `create_user`,`update_user`,`update_time`,`isdelete`,`showorder`) VALUES
+		(null,#{super_id},#{function_name},#{function_url},#{function_icon},#{function_type},
+		#{function_desc},#{create_time},#{create_user},#{update_user},#{update_time},1,#{showOrder})
+	</insert>
+	
+	<select id="getFunctionById" parameterType="map" resultType="com.zyuc.common.model.SystemFunction">
+		select id, super_id , function_name , function_url, function_icon , 
+		function_type , function_icon , function_desc  ,showorder,
+		create_user , create_time , update_user , update_time
+		FROM
+		${dbsystemname}.system_functionen
+		where id=#{functionId}
+		and isdelete =1
+	</select>
+	
+	<update id="updateFunction" parameterType="com.zyuc.common.model.SystemFunction">
+		update ${dbsystemname}.system_functionen
+		<set>
+			<if test="super_id != null and super_id != '' ">
+				super_id=#{super_id},
+			</if>
+			<if test="function_name != null and function_name != '' ">
+				function_name=#{function_name},
+			</if>
+			<if test="function_url != null and function_url != '' ">
+				function_url=#{function_url},
+			</if>
+			<if test="function_icon != null and function_icon != '' ">
+				function_icon=#{function_icon},
+			</if>
+			<if test="function_type != null and function_type != '' ">
+				function_type=#{function_type},
+			</if>
+			<if test="function_icon != null and function_icon != '' ">
+				function_icon=#{function_icon},
+			</if>
+			<if test="function_desc != null and function_desc != '' ">
+				function_desc=#{function_desc},
+			</if>
+			<if test="create_user != null and create_user != '' ">
+				create_user=#{create_user},
+			</if>
+			<if test="update_user != null and update_user != '' ">
+				update_user=#{update_user},
+			</if>
+			<if test="create_time != null ">
+				create_time=#{create_time},
+			</if>
+			<if test="update_time != null ">
+				update_time=#{update_time},
+			</if>
+			<if test="isDelete != null and isDelete != '' ">
+				isdelete=#{isDelete},
+			</if>
+			<if test="showOrder != null">
+				showorder=#{showOrder},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="getRoleByUserId" parameterType="map" resultType="com.zyuc.system.model.SystemRole">
+		select id, role_name as roleName from ${dbsystemname}.system_roleen where id in (select role_id from ${dbsystemname}.system_user_roleen where user_id=#{userId})
+	</select>
+	
+	<delete id="deleteUserRoles" parameterType="map">  
+        delete from ${dbsystemname}.system_user_roleen where user_id = #{userId}  
+    </delete> 
+    
+    <insert id="addUserRoles" parameterType="com.zyuc.system.model.SystemUser" >
+		INSERT INTO ${dbsystemname}.system_user_roleen
+		(`id`, `user_id`, `role_id`) VALUES
+		(null,#{userId},#{selectRoleId})
+	</insert>
+	
+	<select id="getFunctionsByRoleId" parameterType="map" resultType="com.zyuc.common.model.SystemFunction">
+		SELECT * from ${dbsystemname}.system_functionen 
+		WHERE id in(
+		SELECT function_id from ${dbsystemname}.system_role_functionen WHERE role_id=#{roleId})
+	</select>
+    
+    <insert id="addRoleFunctions" parameterType="map" >
+		INSERT INTO ${dbsystemname}.system_role_functionen
+		(`id`, `role_id`, `function_id`) VALUES
+		(null,#{roleId},#{functionId})
+	</insert>
+	
+	<delete id="deleteRoleFunctions" parameterType="map">  
+        delete from ${dbsystemname}.system_role_functionen where role_id=#{roleId}  
+    </delete> 
+    
+    <select id="getParentByFunctionId" parameterType="map" resultType="com.zyuc.common.model.SystemFunction">
+		select * from ${dbsystemname}.system_functionen where id in(select super_id from ${dbsystemname}.system_functionen where id=#{functionId})
+	</select>
+	
+	<select id="getFunctionsByUserId" parameterType="map" resultType="com.zyuc.common.model.SystemFunction">
+		SELECT * from ${dbsystemname}.system_functionen 
+		WHERE id in(
+		SELECT function_id from ${dbsystemname}.system_role_functionen WHERE role_id in (
+		select role_id from ${dbsystemname}.system_user_roleen WHERE user_id=#{userId}))
+	</select>
+	
+	<select id="getUsersByRoleId" parameterType="map" resultType="String">
+		select user_id from ${dbsystemname}.system_user_roleen where role_id=#{roleId}
+	</select>
+	
+	<delete id="deleteRoleFunctionsByFunctionId" parameterType="map">  
+        delete from ${dbsystemname}.system_role_functionen where function_id=#{functionId}  
+    </delete> 
+	
+</mapper>

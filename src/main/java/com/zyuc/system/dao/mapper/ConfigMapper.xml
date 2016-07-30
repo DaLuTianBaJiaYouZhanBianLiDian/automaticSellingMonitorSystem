@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyuc.system.dao.IConfigMapper">
+
+	<select id="getDetectSetting4Cust" parameterType="map"
+		resultType="com.zyuc.system.model.DetectSetting">
+		select * from ${dbsystemname}.detectsetting where
+		custid=#{custid}
+	</select>
+
+	<select id="getThresholdtDetectSetting4Cust" parameterType="map"
+		resultType="com.zyuc.system.model.ThresholdSetting">
+		select * from ${dbsystemname}.thresholdsetting where
+		custid=#{custid}
+	</select>
+
+	<update id="updata4DetectonSetting" parameterType="com.zyuc.system.model.DetectSetting">
+		UPDATE ${dbsystemname}.detectsetting
+		<set>
+			detectmode = #{detectmode},
+			enablebline = #{enablebline},
+			severityrate =#{severityrate},
+			severitymultiplier = #{severitymultiplier},
+			ignorerate = #{ignorerate},
+			severitybps = #{severitybps},
+			severitypps = #{severitypps},
+			basetime = #{basetime},
+			enabletsline = #{enabletsline},
+			trainperiod = #{trainperiod},
+			modelperiod = #{modelperiod},
+			tsdetectperiod = #{tsdetectperiod},
+			tsdropnum = #{tsdropnum},
+			tsbasetime = #{tsbasetime},
+			modifyip = #{modifyip},
+			modifytime = #{modifytime}
+		</set>
+		WHERE custid=#{custid}
+	</update>
+
+	<update id="updata4ThresholdSetting" parameterType="com.zyuc.system.model.ThresholdSetting">
+		UPDATE ${dbsystemname}.thresholdsetting
+		<set>
+			dnsthrenable=#{dnsthrenable},
+			dnstriggerrate=#{dnstriggerrate},
+			dnsseverityrate=#{dnsseverityrate},
+			icmpthrenable=#{icmpthrenable},
+			icmptriggerrate=#{icmptriggerrate},
+			icmpseverityrate=#{icmpseverityrate},
+			ipfragthrenable=#{ipfragthrenable},
+			ipfragtriggerrate=#{ipfragtriggerrate},
+			ipfragseverityrate=#{ipfragseverityrate},
+			ipnullthrenable=#{ipnullthrenable},
+			ipnulltriggerrate=#{ipnulltriggerrate},
+			ipnullseverityrate=#{ipnullseverityrate},
+			ipprivatethrenable=#{ipprivatethrenable},
+			ipprivatetriggerrate=#{ipprivatetriggerrate},
+			ipprivateseverityrate=#{ipprivateseverityrate},
+			tcpnullthrenable=#{tcpnullthrenable},
+			tcpnulltriggerrate=#{tcpnulltriggerrate},
+			tcpnullseverityrate=#{tcpnullseverityrate},
+			tcprstthrenable=#{tcprstthrenable},
+			tcprsttriggerrate=#{tcprsttriggerrate},
+			tcprstseverityrate=#{tcprstseverityrate},
+			tcpsynthrenable=#{tcpsynthrenable},
+			tcpsyntriggerrate=#{tcpsyntriggerrate},
+			tcpsynseverityrate=#{tcpsynseverityrate},
+			udpthrenable=#{udpthrenable},
+			udptriggerrate=#{udptriggerrate},
+			udpseverityrate=#{udpseverityrate},
+			totalppshrenable=#{totalppshrenable},
+			totalppstriggerrate=#{totalppstriggerrate},
+			totalppsseverityrate=#{totalppsseverityrate},
+			totalbpshrenable=#{totalbpshrenable},
+			totalbpstriggerrate=#{totalbpstriggerrate},
+			totalbpsseverityrate=#{totalbpsseverityrate},
+			dnstriggerunit=#{dnstriggerunit},
+			dnsseverityunit=#{dnsseverityunit},
+			icmptriggerunit=#{icmptriggerunit},
+			icmpseverityunit=#{icmpseverityunit},
+			ipfragtriggerunit=#{ipfragtriggerunit},
+			ipfragseverityunit=#{ipfragseverityunit},
+			ipnulltriggerunit=#{ipnulltriggerunit},
+			ipnullseverityunit=#{ipnullseverityunit},
+			ipprivatetriggerunit=#{ipprivatetriggerunit},
+			ipprivateseverityunit=#{ipprivateseverityunit},
+			tcpnulltriggerunit=#{tcpnulltriggerunit},
+			tcpnullseverityunit=#{tcpnullseverityunit},
+			tcprsttriggerunit=#{tcprsttriggerunit},
+			tcprstseverityunit=#{tcprstseverityunit},
+			tcpsyntriggerunit=#{tcpsyntriggerunit},
+			tcpsynseverityunit=#{tcpsynseverityunit},
+			udptriggerunit=#{udptriggerunit},
+			udpseverityunit=#{udpseverityunit},
+			totalppstriggerunit=#{totalppstriggerunit},
+			totalppsseverityunit=#{totalppsseverityunit},
+			totalbpstriggerunit=#{totalbpstriggerunit},
+			totalbpsseverityunit=#{totalbpsseverityunit},
+			modifytime=#{modifytime},
+			modifyip=#{modifyip}
+		</set>
+		WHERE custid=#{custid}
+	</update>
+
+	<insert id="insertDetectonSettingCust" parameterType="com.zyuc.system.model.DetectSetting">
+		INSERT INTO
+		${dbsystemname}.`detectsetting`
+		(`uuid`, `custid`, `setting`,
+		`detectmode`, `enablebline`, `severityrate`,
+		`severitymultiplier`,
+		`ignorerate`, `severitybps`, `severitypps`,
+		`basetime`,
+		`enabletsline`,
+		`trainperiod`, `modelperiod`,
+		`tsdetectperiod`,
+		`tsdropnum`,
+		`tsbasetime`, `modifytime`, `modifyip`)
+		VALUES (#{uuid}, #{custid},
+		NULL, '', '', '95', '2.5', '40', '20',
+		'200',
+		'24', '', '12', '1',
+		'120', '2', '24',#{modifytime},
+		#{modifyip});
+	</insert>
+
+	<insert id="insertThresholdSettingCust" parameterType="com.zyuc.system.model.DetectSetting">
+		INSERT
+		INTO
+		${dbsystemname}.thresholdsetting
+		(`id`, `custid`,"
+		`dnsthrenable`,
+		`dnstriggerrate`, `dnsseverityrate`, `icmpthrenable`,
+		`icmptriggerrate`, `icmpseverityrate`,
+		`ipfragthrenable`,
+		`ipfragtriggerrate`, `ipfragseverityrate`, `ipnullthrenable`,
+		`ipnulltriggerrate`, `ipnullseverityrate`,"
+		`ipprivatethrenable`,
+		`ipprivatetriggerrate`, `ipprivateseverityrate`, `tcpnullthrenable`,
+		`tcpnulltriggerrate`, `tcpnullseverityrate`,
+		`tcprstthrenable`,
+		`tcprsttriggerrate`, `tcprstseverityrate`, `tcpsynthrenable`,
+		`tcpsyntriggerrate`, `tcpsynseverityrate`,
+		`udpthrenable`,
+		`udptriggerrate`, `udpseverityrate`, `totalbpshrenable`,
+		`totalbpstriggerrate`, `totalbpsseverityrate`,
+		`totalppshrenable`,
+		`totalppstriggerrate`, `totalppsseverityrate`, "
+		`dnstriggerunit`,
+		`dnsseverityunit`, `icmptriggerunit`, `icmpseverityunit`,
+		`ipfragtriggerunit`, `ipfragseverityunit`, `ipnulltriggerunit`,
+		`ipnullseverityunit`,
+		`ipprivatetriggerunit`, `ipprivateseverityunit`,
+		`tcpnulltriggerunit`, `tcpnullseverityunit`,
+		`tcprsttriggerunit`,
+		`tcprstseverityunit`, `tcpsyntriggerunit`,
+		`tcpsynseverityunit`,
+		`udptriggerunit`, `udpseverityunit`, `totalbpstriggerunit`,
+		`totalbpsseverityunit`,
+		`totalppstriggerunit`, `totalppsseverityunit`,"
+		`modifytime`, `modifyip` "
+		) VALUES (#{id}, #{custid},
+		'off', 2222,
+		4444, 'on', 2222, 4444,
+		'off', 2222, 4444, 'on', 2222, 4444,
+		'off',
+		2222, 4444, 'on', 2222, 4444,
+		'off', 2222, 4444, 'on', 2222, 4444,
+		'off', 2222, 4444, 'on', 2222, 4444,
+		'on', 2222, 4444,
+		'Kpps', 'Kpps',
+		'Mpps', 'Kpps',
+		'Kpps', 'Kpps', 'Kpps', 'Kpps',
+		'Kpps', 'Kpps', 'Kpps',
+		'Kpps',
+		'Kpps', 'Kpps', 'Kpps', 'Kpps',
+		'Kpps', 'Kpps', 'Kbps', 'Kbps',
+		'Kpps', 'Kpps', #{modifytime}, '127.0.0.1');
+	</insert>
+
+	<select id="getRoutes" resultType="com.zyuc.system.model.Route">
+		select *
+		from
+		${dbsystemname}.routecollector
+	</select>
+
+	<select id="getCusts" resultType="com.zyuc.system.model.Cust">
+		select *
+		from
+		${dbsystemname}.base_customer
+	</select>
+
+	<select id="getRouteByIp" parameterType="map" resultType="com.zyuc.system.model.Route">
+		select *
+		from
+		${dbsystemname}.routecollector
+		where routeip=#{routeip}
+	</select>
+	<insert id="addRoute" parameterType="com.zyuc.system.model.Route" >
+		INSERT INTO
+		${dbsystemname}.`routecollector`
+		(`name`, `description`,`routeip`, `snmp_version`, `snmp_ip`, `snmp_communiry`,
+		`flow_ip`,`flow_port`, `flow_simple`, `uuid`, `UPDATE_TIME`) VALUES
+		(#{name},#{description},#{routeip},#{snmp_version},#{snmp_ip},#{snmp_communiry},
+		#{flow_ip},#{flow_port},#{flow_simple},#{uuid},#{UPDATE_TIME})
+	</insert>
+	<update id="updateRoute" parameterType="com.zyuc.system.model.Route">
+		update ${dbsystemname}.routecollector
+		<set>
+			<if test="name != null and name != '' ">
+				name=#{name},
+			</if>
+			<if test="description != null and description != '' ">
+				description=#{description},
+			</if>
+			<if test="snmp_version != null and snmp_version != '' ">
+				snmp_version=#{snmp_version},
+			</if>
+			<if test="snmp_ip != null and snmp_ip != '' ">
+				snmp_ip=#{snmp_ip},
+			</if>
+			<if test="snmp_communiry != null and snmp_communiry != '' ">
+				snmp_communiry=#{snmp_communiry},
+			</if>
+			<if test="flow_ip != null and flow_ip != '' ">
+				flow_ip=#{flow_ip},
+			</if>
+			<if test="flow_port != null and flow_port != '' ">
+				flow_port=#{flow_port},
+			</if>
+			<if test="flow_simple != null and flow_simple != '' ">
+				flow_simple=#{flow_simple},
+			</if>
+			<if test="UPDATE_TIME != null and UPDATE_TIME != '' ">
+				UPDATE_TIME=#{UPDATE_TIME},
+			</if>
+		</set>
+		where routeip = #{routeip}
+	</update>
+	<delete id="deleteRouteByIp" parameterType="map">  
+		delete from ${dbsystemname}.routecollector 
+		where routeip = #{routeip}
+    </delete>
+    
+    <select id="getCustByUUID" parameterType="map" resultType="com.zyuc.system.model.Cust">
+		select *
+		from
+		${dbsystemname}.base_customer
+		where uuid = #{uuid} limit 1
+	</select>
+
+	<insert id="addCust" parameterType="com.zyuc.system.model.Cust" >
+		INSERT INTO
+		${dbsystemname}.`base_customer` (uuid, cuscode, address, customername, bandwidth, asnum, pass, ispcode, updatetime) 
+		VALUES
+		(#{uuid},#{cuscode},#{address},#{customername},#{bandwidth},#{asnum},#{pass},#{ispcode},#{updatetime})
+	</insert>
+	
+	<update id="updateCust" parameterType="com.zyuc.system.model.Cust">
+		update ${dbsystemname}.base_customer
+		<set>
+			<if test="cuscode != null and cuscode != '' ">
+				cuscode=#{cuscode},
+			</if>
+			<if test="address != null and address != '' ">
+				address=#{address},
+			</if>
+			<if test="customername != null and customername != '' ">
+				customername=#{customername},
+			</if>
+			<if test="bandwidth != null and bandwidth != '' ">
+				bandwidth=#{bandwidth},
+			</if>
+			<if test="asnum != null and asnum != '' ">
+				asnum=#{asnum},
+			</if>
+			<if test="pass != null and pass != '' ">
+				pass=#{pass},
+			</if>
+			<if test="ispcode != null and ispcode != '' ">
+				ispcode=#{ispcode},
+			</if>
+			<if test="updatetime != null ">
+				updatetime=#{updatetime},
+			</if>
+		</set>
+		where uuid = #{uuid}
+	</update>
+	
+	<delete id="deleteCustByUUID" parameterType="map">  
+		delete from ${dbsystemname}.base_customer 
+		where uuid = #{uuid}
+    </delete>
+</mapper>

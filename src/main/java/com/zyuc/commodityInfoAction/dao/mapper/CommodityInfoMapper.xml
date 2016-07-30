@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyuc.commodityInfoAction.dao.ICommodityInfoMapper">
+
+	<!-- 条件，查询的公共部分 -->
+	<sql id="queryCommodityInfoCondition">
+	WHERE
+		<if test="commodity_delete_status != null and commodity_delete_status !=''">		<!-- 商品删除状态-->
+			commodity_delete_status=#{commodity_delete_status}
+		</if>
+		<if test="commodity_code != null and commodity_code !=''">		<!-- 商品编码 精确查询-->
+			and commodity_code=#{commodity_code}
+		</if>
+		<if test="commodity_name != null and commodity_name !=''">		<!-- 商品名称 -->
+			and commodity_name LIKE CONCAT('%',#{commodity_name},'%')
+		</if>
+		<if test="commodity_type != null and commodity_type !=''">		<!-- 商品类型 -->
+			and commodity_type LIKE CONCAT('%',#{commodity_type},'%')
+		</if>
+		<if test="commodity_network_supply != null and commodity_network_supply !=''">		<!-- 商品供应商 -->
+			and commodity_network_supply LIKE CONCAT('%',#{commodity_network_supply},'%')
+		</if>
+		<if test="commodity_create_by != null and commodity_create_by !=''">		<!-- 创建人 -->
+			and commodity_create_by LIKE CONCAT('%',#{commodity_create_by},'%')
+		</if>
+		<if test="commodity_update_by != null and commodity_update_by !=''">		<!-- 更新人 -->
+			and commodity_update_by LIKE CONCAT('%',#{commodity_update_by},'%')
+		</if>
+		<if test="commodity_remark != null and commodity_remark !=''">		<!-- 商品备注 -->
+			and commodity_remark LIKE CONCAT('%',#{commodity_remark},'%')
+		</if>
+	</sql>
+	
+	<!-- 查询符合条件的商品信息 -->
+	<select id="queryCommodityInfoList" parameterType="com.zyuc.commodityInfoAction.model.CommodityInfoModel" resultType="com.zyuc.commodityInfoAction.model.CommodityInfoModel">
+		select * FROM
+		${dbsystemname}.commodity_info
+		<include refid="queryCommodityInfoCondition"></include>
+		<if test="pagingCondition != null and pagingCondition.startIndex != null and pagingCondition.count !=null">
+			limit #{pagingCondition.startIndex},#{pagingCondition.count}
+		</if>
+	</select>
+	
+	<!-- 查询符合条件的商品信息的总数 -->
+	<select id="queryCommodityInfoTotal" parameterType="com.zyuc.commodityInfoAction.model.CommodityInfoModel" resultType="int">
+		SELECT count(1)
+		FROM ${dbsystemname}.commodity_info
+		<include refid="queryCommodityInfoCondition"></include>
+	</select>
+
+</mapper>
