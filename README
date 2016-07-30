@@ -1,0 +1,17 @@
+﻿WEB工程--综合流量流向分析系统
+
+包名划分：
+
+com.zyuc.common  通用功能模块
+com.zyuc.system  系统管理模块
+com.zyuc.ndas    流量流向分析模块
+com.zyuc.naas    攻击检测模块
+com.zyuc.nats    攻击溯源模块
+
+界面目录：
+
+|--lib   页面依赖包，各种插件
+|--automaticSellingMonitorSystem
+	|--css   页面自定义样式
+	|--js    页面自定义js
+	|--page  页面
